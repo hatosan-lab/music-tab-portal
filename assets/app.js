@@ -97,12 +97,32 @@
       const response = await fetch(dataUrl, { cache: "no-cache" });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const data = await response.json();
+      const songs = data.songs.map((row) => {
+        const [title, artistIndex, releaseIndexes, year, primaryKeyIndex, appearingKeyIndexes, bpm, piascoreScoreId, videos] = row;
+        const song = {
+          title,
+          artist: data.artists[artistIndex],
+        };
+        if (releaseIndexes) song.releases = releaseIndexes.map((index) => data.releases[index]);
+        if (year !== null && year !== undefined) song.year = year;
+        if (primaryKeyIndex !== null && primaryKeyIndex !== undefined) song.primaryKey = data.keys[primaryKeyIndex];
+        if (appearingKeyIndexes) song.appearingKeys = appearingKeyIndexes.map((index) => data.keys[index]);
+        if (bpm !== null && bpm !== undefined) song.bpm = bpm;
+        if (piascoreScoreId) {
+          song.tab = {
+            scoreId: piascoreScoreId,
+            url: data.piascoreUrlTemplate.replace("{scoreId}", piascoreScoreId),
+          };
+        }
+        if (videos) song.videos = videos.map(([videoTitle, url]) => ({ title: videoTitle, url }));
+        return song;
+      });
       const baseSongs = fixedArtist
-        ? data.songs.filter((song) => song.artist === fixedArtist)
-        : data.songs.slice();
+        ? songs.filter((song) => song.artist === fixedArtist)
+        : songs.slice();
 
       if (artistFilter) {
-        [...new Set(data.songs.map((song) => song.artist))]
+        [...new Set(songs.map((song) => song.artist))]
           .sort((a, b) => a.localeCompare(b, "ja"))
           .forEach((artist) => addOption(artistFilter, artist));
       }
