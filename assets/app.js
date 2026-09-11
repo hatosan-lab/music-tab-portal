@@ -73,7 +73,7 @@
 
     const actions = make("div", "actions");
     if (song.tab) {
-      const tabLink = make("a", "button", "TABを見る");
+      const tabLink = make("a", "button", "PiascoreでTABを見る");
       tabLink.href = song.tab.url;
       tabLink.target = "_blank";
       tabLink.rel = "noopener noreferrer";
