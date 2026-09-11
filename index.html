@@ -3,8 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Hatosan Music Labの楽曲情報・ギターTAB・演奏動画ポータル。">
-  <title>Hatosan Music Lab | TAB・楽曲ポータル</title>
+  <meta name="description" content="UNISON SQUARE GARDEN／Aoooを中心に、曲名・収録作品・キー・BPMから楽曲を検索し、販売中のギターTABや演奏動画を確認できます。">
+  <link rel="canonical" href="https://hatosan-lab.github.io/music-tab-portal/">
+  <meta property="og:title" content="ギターTAB・BPM・キー検索 | Hatosan Music Lab">
+  <meta property="og:description" content="UNISON SQUARE GARDEN／Aoooを中心に、曲名・収録作品・キー・BPMから楽曲を検索し、販売中のギターTABや演奏動画を確認できます。">
+  <meta property="og:url" content="https://hatosan-lab.github.io/music-tab-portal/">
+  <meta property="og:type" content="website">
+  <title>ギターTAB・BPM・キー検索 | Hatosan Music Lab</title>
   <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body data-data-url="data/songs.json">
@@ -21,54 +26,26 @@
     <section class="hero">
       <p class="eyebrow">TAB & SONG CATALOG</p>
       <h1>弾きたい曲を、<br>すぐ探せる。</h1>
-      <p>楽曲情報、ギターTAB、公開済みの演奏動画をひとつのカタログにまとめています。検索と絞り込みから目的の曲を探せます。</p>
+      <p>UNISON SQUARE GARDEN／Aoooを中心に、曲名・収録作品・キー・BPMから検索できます。販売中のギターTABは各曲からPiascoreで確認でき、コピー前の楽曲情報確認にも使えます。</p>
+      <div class="actions"><a class="button" href="#catalog">曲を検索する</a></div>
     </section>
     <section class="focus-links" aria-label="主要アーティスト">
-      <a class="focus-card" href="tabs/unison/">
-        <strong>UNISON SQUARE GARDEN</strong>
-        <span>楽曲情報とTABを探す</span>
-      </a>
-      <a class="focus-card" href="tabs/aooo/">
-        <strong>Aooo</strong>
-        <span>楽曲情報とTABを探す</span>
-      </a>
+      <a class="focus-card" href="tabs/unison/"><strong>UNISON SQUARE GARDEN</strong><span>楽曲情報とTABを探す</span></a>
+      <a class="focus-card" href="tabs/aooo/"><strong>Aooo</strong><span>楽曲情報とTABを探す</span></a>
     </section>
     <section class="catalog" id="catalog">
-      <div class="catalog-heading">
-        <h2>全楽曲</h2>
-        <p id="resultCount" class="result-count" aria-live="polite">読み込み中</p>
-      </div>
+      <div class="catalog-heading"><h2>全楽曲</h2><p id="resultCount" class="result-count" aria-live="polite">読み込み中</p></div>
       <div class="filters" aria-label="楽曲の絞り込み">
-        <div class="field">
-          <label for="searchInput">検索</label>
-          <input id="searchInput" type="search" placeholder="曲名・作品名・キー・BPM" autocomplete="off">
-        </div>
-        <div class="field">
-          <label for="artistFilter">アーティスト</label>
-          <select id="artistFilter"><option value="">すべて</option></select>
-        </div>
-        <div class="field">
-          <label for="keyFilter">主キー</label>
-          <select id="keyFilter"><option value="">すべて</option></select>
-        </div>
-        <div class="field">
-          <label for="sortSelect">並び順</label>
-          <select id="sortSelect">
-            <option value="year-desc">新しい順</option>
-            <option value="title">曲名順</option>
-            <option value="bpm">BPM順</option>
-          </select>
-        </div>
-        <div class="checkbox-field">
-          <label class="checkbox-label"><input id="tabOnly" type="checkbox">TAB販売中のみ</label>
-        </div>
+        <div class="field"><label for="searchInput">検索</label><input id="searchInput" type="search" placeholder="曲名・作品名・キー・BPM" autocomplete="off"></div>
+        <div class="field"><label for="artistFilter">アーティスト</label><select id="artistFilter"><option value="">すべて</option></select></div>
+        <div class="field"><label for="keyFilter">主キー</label><select id="keyFilter"><option value="">すべて</option></select></div>
+        <div class="field"><label for="sortSelect">並び順</label><select id="sortSelect"><option value="year-desc">新しい順</option><option value="title">曲名順</option><option value="bpm">BPM順</option></select></div>
+        <div class="checkbox-field"><label class="checkbox-label"><input id="tabOnly" type="checkbox">TAB販売中のみ</label></div>
       </div>
       <div id="songGrid" class="song-grid" aria-live="polite"></div>
     </section>
   </main>
-  <footer class="site-footer">
-    <div class="footer-inner">楽曲データは管理DBの確認済み情報のみを掲載しています。</div>
-  </footer>
+  <footer class="site-footer"><div class="footer-inner">楽曲データは管理DBの確認済み情報のみを掲載しています。</div></footer>
   <script src="assets/app.js" defer></script>
 </body>
 </html>
