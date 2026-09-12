@@ -10,6 +10,7 @@
   const artistFilter = document.getElementById("artistFilter");
   const keyFilter = document.getElementById("keyFilter");
   const yearFilter = document.getElementById("yearFilter");
+  const effectFilter = document.getElementById("effectFilter");
   const syncFilter = document.getElementById("syncFilter");
   const tabOnly = document.getElementById("tabOnly");
   const sortSelect = document.getElementById("sortSelect");
@@ -111,7 +112,7 @@
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const data = await response.json();
       const songs = data.songs.map((row) => {
-        const [title, artistIndex, releaseIndexes, year, primaryKeyIndex, appearingKeyIndexes, bpm, piascoreScoreId, videos, sync] = row;
+        const [title, artistIndex, releaseIndexes, year, primaryKeyIndex, appearingKeyIndexes, bpm, piascoreScoreId, videos, sync, effectIndexes] = row;
         const song = {
           title,
           artist: data.artists[artistIndex],
@@ -129,6 +130,7 @@
           };
         }
         if (videos) song.videos = videos.map(([videoTitle, url]) => ({ title: videoTitle, url }));
+        if (effectIndexes) song.effects = effectIndexes.map((index) => data.effects[index]);
         return song;
       });
       const baseSongs = fixedArtist
@@ -153,11 +155,32 @@
           .forEach((year) => addOption(yearFilter, String(year), String(year)));
       }
 
+      const effectRank = new Map((data.effects || []).map((effect, index) => [effect, index]));
+      const refreshEffectOptions = () => {
+        if (!effectFilter) return;
+        const selected = effectFilter.value;
+        const artist = artistFilter?.value || fixedArtist;
+        const source = artist
+          ? baseSongs.filter((song) => song.artist === artist)
+          : baseSongs;
+        const options = [...new Set(
+          source.flatMap((song) => song.effects || []).filter((effect) => effect && effect !== "不明")
+        )].sort((a, b) => (effectRank.get(a) ?? 999) - (effectRank.get(b) ?? 999) || a.localeCompare(b, "en"));
+
+        effectFilter.replaceChildren();
+        addOption(effectFilter, "", "すべて");
+        options.forEach((effect) => addOption(effectFilter, effect));
+        effectFilter.value = options.includes(selected) ? selected : "";
+      };
+
+      refreshEffectOptions();
+
       const update = () => {
         const query = normalize(searchInput?.value);
         const artist = artistFilter?.value || fixedArtist;
         const key = keyFilter?.value || "";
         const year = yearFilter?.value || "";
+        const effect = effectFilter?.value || "";
         const sync = syncFilter?.value || "";
         const onlyTab = Boolean(tabOnly?.checked);
         const sort = sortSelect?.value || "year-desc";
@@ -167,6 +190,7 @@
           if (artist && song.artist !== artist) return false;
           if (key && song.primaryKey !== key) return false;
           if (year && String(song.year) !== year) return false;
+          if (effect && !(song.effects || []).includes(effect)) return false;
           if (sync === "yes" && !song.sync) return false;
           if (sync === "no" && song.sync) return false;
           if (onlyTab && !song.tab) return false;
@@ -193,7 +217,13 @@
       };
 
       if (searchInput) searchInput.addEventListener("input", update);
-      [artistFilter, keyFilter, yearFilter, syncFilter, tabOnly, sortSelect]
+      if (artistFilter) {
+        artistFilter.addEventListener("change", () => {
+          refreshEffectOptions();
+          update();
+        });
+      }
+      [keyFilter, yearFilter, effectFilter, syncFilter, tabOnly, sortSelect]
         .filter(Boolean)
         .forEach((el) => el.addEventListener("change", update));
 
