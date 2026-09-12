@@ -78,13 +78,12 @@
     const details = make("div", "detail-list");
     if (song.releases?.length) addDetail(details, "収録作品: ", song.releases.join(" / "));
     if (song.year) addDetail(details, "リリース年: ", `${song.year}`);
-    if (song.primaryKey) addDetail(details, "主キー: ", keyChips([song.primaryKey]));
+    const appearingKeys = song.appearingKeys?.length
+      ? song.appearingKeys
+      : (song.primaryKey ? [song.primaryKey] : []);
+    if (appearingKeys.length) addDetail(details, "登場キー: ", keyChips(appearingKeys));
 
-    const others = song.primaryKey
-      ? (song.appearingKeys || []).filter((key) => key !== song.primaryKey)
-      : (song.appearingKeys || []);
-    if (others.length) addDetail(details, "他の登場キー: ", keyChips(others));
-
+    if (song.bpm !== undefined) addDetail(details, "基準BPM: ", `${song.bpm}`);
     if (song.artist === "UNISON SQUARE GARDEN" && song.capo !== undefined) {
       addDetail(details, "カポ: ", song.capo === 0 ? "なし" : `${song.capo}カポ`);
     }
@@ -96,7 +95,8 @@
         addDetail(details, "Rhythm Gtカポ: ", song.rhythmCapo === 0 ? "なし" : `${song.rhythmCapo}カポ`);
       }
     }
-    if (song.bpm !== undefined) addDetail(details, "基準BPM: ", `${song.bpm}`);
+    const visibleEffects = (song.effects || []).filter((effect) => effect && effect !== "不明");
+    if (visibleEffects.length) addDetail(details, "特殊エフェクト: ", keyChips(visibleEffects));
     if (song.tabPart && song.artist !== "UNISON SQUARE GARDEN" && song.artist !== "Aooo") {
       addDetail(details, "TABパート: ", song.tabPart);
     }
