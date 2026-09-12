@@ -42,8 +42,7 @@
       song.title,
       song.artist,
       ...(song.releases || []),
-      song.primaryKey,
-      ...(song.appearingKeys || []),
+      ...(song.appearingKeys?.length ? song.appearingKeys : (song.primaryKey ? [song.primaryKey] : [])),
       song.bpm,
     ].join(" "));
 
@@ -185,7 +184,9 @@
       }
 
       if (keyFilter) {
-        [...new Set(baseSongs.map((song) => song.primaryKey).filter(Boolean))]
+        [...new Set(baseSongs.flatMap((song) =>
+          song.appearingKeys?.length ? song.appearingKeys : (song.primaryKey ? [song.primaryKey] : [])
+        ).filter(Boolean))]
           .sort((a, b) => a.localeCompare(b, "en"))
           .forEach((key) => addOption(keyFilter, key));
       }
@@ -236,7 +237,7 @@
         let songs = baseSongs.filter((song) => {
           if (query && !searchableText(song).includes(query)) return false;
           if (artist && song.artist !== artist) return false;
-          if (key && song.primaryKey !== key) return false;
+          if (key && !(song.appearingKeys?.length ? song.appearingKeys : (song.primaryKey ? [song.primaryKey] : [])).includes(key)) return false;
           if (year && String(song.year) !== year) return false;
           if (effect && !(song.effects || []).includes(effect)) return false;
           if (capo === "yes" && !(song.capo > 0)) return false;
