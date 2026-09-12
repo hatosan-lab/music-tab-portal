@@ -3,16 +3,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="UNISON SQUARE GARDENの曲名・収録作品・キー・BPMを検索できます。販売中のギターTABはPiascoreで確認できます。">
+  <meta name="description" content="UNISON SQUARE GARDENの曲名・収録作品・キー・BPM・カポ位置を検索できます。販売中のギターTABはPiascoreで確認できます。">
   <link rel="canonical" href="https://hatosan-lab.github.io/music-tab-portal/tabs/unison/">
   <meta property="og:title" content="UNISON SQUARE GARDEN ギターTAB・BPM・キー一覧 | Hatosan Music Lab">
-  <meta property="og:description" content="UNISON SQUARE GARDENの曲名・収録作品・キー・BPMを検索できます。販売中のギターTABはPiascoreで確認できます。">
+  <meta property="og:description" content="UNISON SQUARE GARDENの曲名・収録作品・キー・BPM・カポ位置を検索できます。販売中のギターTABはPiascoreで確認できます。">
   <meta property="og:url" content="https://hatosan-lab.github.io/music-tab-portal/tabs/unison/">
   <meta property="og:type" content="website">
   <title>UNISON SQUARE GARDEN ギターTAB・BPM・キー一覧 | Hatosan Music Lab</title>
   <link rel="stylesheet" href="../../assets/styles.css">
 </head>
-<body data-data-url="../../data/songs.json" data-artist="UNISON SQUARE GARDEN">
+<body data-data-url="../../data/songs.json" data-capo-url="../../data/unison-capo.json" data-artist="UNISON SQUARE GARDEN">
   <header class="site-header">
     <div class="header-inner">
       <a class="brand" href="../../">Hatosan Music Lab</a>
@@ -26,7 +26,7 @@
     <section class="hero">
       <p class="eyebrow">ARTIST CATALOG</p>
       <h1>UNISON SQUARE GARDEN</h1>
-      <p>曲名・収録作品・キー・BPMから楽曲情報を検索できます。販売中のTABはギターTABで、各曲からPiascoreで確認できます。コピー前の情報確認にも使えます。</p>
+      <p>曲名・収録作品・キー・BPM・カポ位置から楽曲情報を検索できます。販売中のTABはギターTABで、各曲からPiascoreで確認できます。コピー前の情報確認にも使えます。</p>
     </section>
     <section class="catalog">
       <div class="catalog-heading">
@@ -49,6 +49,14 @@
         <div class="field">
           <label for="effectFilter">特殊エフェクト</label>
           <select id="effectFilter"><option value="">すべて</option></select>
+        </div>
+        <div class="field">
+          <label for="capoFilter">カポ</label>
+          <select id="capoFilter">
+            <option value="">すべて</option>
+            <option value="yes">カポあり</option>
+            <option value="no">カポなし</option>
+          </select>
         </div>
         <div class="field">
           <label for="syncFilter">同期音源</label>
