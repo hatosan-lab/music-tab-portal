@@ -3,6 +3,7 @@
 
   const body = document.body;
   const dataUrl = body.dataset.dataUrl;
+  const capoUrl = body.dataset.capoUrl || "";
   const fixedArtist = body.dataset.artist || "";
   const grid = document.getElementById("songGrid");
   const countNode = document.getElementById("resultCount");
@@ -11,6 +12,7 @@
   const keyFilter = document.getElementById("keyFilter");
   const yearFilter = document.getElementById("yearFilter");
   const effectFilter = document.getElementById("effectFilter");
+  const capoFilter = document.getElementById("capoFilter");
   const syncFilter = document.getElementById("syncFilter");
   const tabOnly = document.getElementById("tabOnly");
   const sortSelect = document.getElementById("sortSelect");
@@ -82,6 +84,9 @@
       : (song.appearingKeys || []);
     if (others.length) addDetail(details, "他の登場キー: ", keyChips(others));
 
+    if (fixedArtist === "UNISON SQUARE GARDEN" && song.capo !== undefined) {
+      addDetail(details, "カポ: ", song.capo === 0 ? "なし" : `${song.capo}カポ`);
+    }
     if (song.bpm !== undefined) addDetail(details, "基準BPM: ", `${song.bpm}`);
     if (song.tabPart && song.artist !== "UNISON SQUARE GARDEN" && song.artist !== "Aooo") {
       addDetail(details, "TABパート: ", song.tabPart);
@@ -114,6 +119,14 @@
       const response = await fetch(dataUrl, { cache: "no-cache" });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const data = await response.json();
+
+      let capoData = null;
+      if (capoUrl) {
+        const capoResponse = await fetch(capoUrl, { cache: "no-cache" });
+        if (!capoResponse.ok) throw new Error(`Capo HTTP ${capoResponse.status}`);
+        capoData = await capoResponse.json();
+      }
+
       const songs = data.songs.map((row) => {
         const [title, artistIndex, releaseIndexes, year, primaryKeyIndex, appearingKeyIndexes, bpm, piascoreScoreId, videos, sync, effectIndexes, tabPart] = row;
         const song = {
@@ -135,6 +148,9 @@
         if (videos) song.videos = videos.map(([videoTitle, url]) => ({ title: videoTitle, url }));
         if (effectIndexes) song.effects = effectIndexes.map((index) => data.effects[index]);
         if (tabPart) song.tabPart = tabPart;
+        if (capoData && song.artist === capoData.artist) {
+          song.capo = capoData.exceptions?.[title] ?? capoData.default;
+        }
         return song;
       });
       const baseSongs = fixedArtist
@@ -157,6 +173,12 @@
         [...new Set(baseSongs.map((song) => song.year).filter((year) => year !== undefined))]
           .sort((a, b) => b - a)
           .forEach((year) => addOption(yearFilter, String(year), String(year)));
+      }
+
+      if (capoFilter) {
+        [...new Set(baseSongs.map((song) => song.capo).filter((capo) => Number.isInteger(capo) && capo > 0))]
+          .sort((a, b) => a - b)
+          .forEach((capo) => addOption(capoFilter, String(capo), `${capo}カポ`));
       }
 
       const effectRank = new Map((data.effects || []).map((effect, index) => [effect, index]));
@@ -185,6 +207,7 @@
         const key = keyFilter?.value || "";
         const year = yearFilter?.value || "";
         const effect = effectFilter?.value || "";
+        const capo = capoFilter?.value || "";
         const sync = syncFilter?.value || "";
         const onlyTab = Boolean(tabOnly?.checked);
         const sort = sortSelect?.value || "year-desc";
@@ -195,6 +218,9 @@
           if (key && song.primaryKey !== key) return false;
           if (year && String(song.year) !== year) return false;
           if (effect && !(song.effects || []).includes(effect)) return false;
+          if (capo === "yes" && !(song.capo > 0)) return false;
+          if (capo === "no" && song.capo !== 0) return false;
+          if (/^\d+$/.test(capo) && song.capo !== Number(capo)) return false;
           if (sync === "yes" && !song.sync) return false;
           if (sync === "no" && song.sync) return false;
           if (onlyTab && !song.tab) return false;
@@ -227,7 +253,7 @@
           update();
         });
       }
-      [keyFilter, yearFilter, effectFilter, syncFilter, tabOnly, sortSelect]
+      [keyFilter, yearFilter, effectFilter, capoFilter, syncFilter, tabOnly, sortSelect]
         .filter(Boolean)
         .forEach((el) => el.addEventListener("change", update));
 
