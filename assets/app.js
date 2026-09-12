@@ -110,11 +110,11 @@
       actions.append(tabLink);
     }
     (song.videos || []).forEach((video) => {
-      const videoLink = make("a", "button secondary", "演奏動画");
+      const videoLink = make("a", "button secondary", video.label || "演奏動画");
       videoLink.href = video.url;
       videoLink.target = "_blank";
       videoLink.rel = "noopener noreferrer";
-      videoLink.title = video.title || "演奏動画";
+      videoLink.title = video.title || video.label || "演奏動画";
       actions.append(videoLink);
     });
     if (actions.childElementCount) article.append(actions);
@@ -160,7 +160,7 @@
             url: data.piascoreUrlTemplate.replace("{scoreId}", piascoreScoreId),
           };
         }
-        if (videos) song.videos = videos.map(([videoTitle, url]) => ({ title: videoTitle, url }));
+        if (videos) song.videos = videos.map(([videoTitle, url, label]) => ({ title: videoTitle, url, label }));
         if (effectIndexes) song.effects = effectIndexes.map((index) => data.effects[index]);
         if (tabPart) song.tabPart = tabPart;
         if (capoData && song.artist === capoData.artist) {
