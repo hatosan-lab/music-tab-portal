@@ -66,7 +66,6 @@
     article.append(make("p", "artist", song.artist));
 
     const meta = make("ul", "meta");
-    if (song.tab) meta.append(make("li", "", "ギターTAB販売中"));
     if (fixedArtist === "UNISON SQUARE GARDEN" && song.sync) {
       meta.append(make("li", "", "同期あり"));
     }
