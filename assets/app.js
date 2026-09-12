@@ -84,7 +84,7 @@
       : (song.appearingKeys || []);
     if (others.length) addDetail(details, "他の登場キー: ", keyChips(others));
 
-    if (fixedArtist === "UNISON SQUARE GARDEN" && song.capo !== undefined) {
+    if (song.artist === "UNISON SQUARE GARDEN" && song.capo !== undefined) {
       addDetail(details, "カポ: ", song.capo === 0 ? "なし" : `${song.capo}カポ`);
     }
     if (song.bpm !== undefined) addDetail(details, "基準BPM: ", `${song.bpm}`);
