@@ -267,6 +267,29 @@ a:focus-visible {
   font-weight: 700;
 }
 
+.detail-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.key-chips {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.key-chip {
+  display: inline-block;
+  padding: 1px 7px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--text);
+  white-space: nowrap;
+}
+
 .actions {
   display: flex;
   flex-wrap: wrap;

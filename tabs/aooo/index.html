@@ -26,7 +26,7 @@
     <section class="hero">
       <p class="eyebrow">ARTIST CATALOG</p>
       <h1>Aooo</h1>
-      <p>曲名・収録作品・キー・BPMから楽曲情報を検索できます。販売中のギターTABは各曲からPiascoreで確認でき、コピー前の情報確認にも使えます。</p>
+      <p>曲名・収録作品・キー・BPMから楽曲情報を検索できます。販売中のTABはギターTABで、各曲からPiascoreで確認できます。コピー前の情報確認にも使えます。</p>
     </section>
     <section class="catalog">
       <div class="catalog-heading">
@@ -43,6 +43,10 @@
           <select id="keyFilter"><option value="">すべて</option></select>
         </div>
         <div class="field">
+          <label for="yearFilter">リリース年</label>
+          <select id="yearFilter"><option value="">すべて</option></select>
+        </div>
+        <div class="field">
           <label for="sortSelect">並び順</label>
           <select id="sortSelect">
             <option value="year-desc">新しい順</option>
@@ -51,7 +55,7 @@
           </select>
         </div>
         <div class="checkbox-field">
-          <label class="checkbox-label"><input id="tabOnly" type="checkbox">TAB販売中のみ</label>
+          <label class="checkbox-label"><input id="tabOnly" type="checkbox">ギターTAB販売中のみ</label>
         </div>
       </div>
       <div id="songGrid" class="song-grid" aria-live="polite"></div>
