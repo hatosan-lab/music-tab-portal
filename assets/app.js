@@ -83,6 +83,9 @@
     if (others.length) addDetail(details, "他の登場キー: ", keyChips(others));
 
     if (song.bpm !== undefined) addDetail(details, "基準BPM: ", `${song.bpm}`);
+    if (song.tabPart && song.artist !== "UNISON SQUARE GARDEN" && song.artist !== "Aooo") {
+      addDetail(details, "TABパート: ", song.tabPart);
+    }
     if (details.childElementCount) article.append(details);
 
     const actions = make("div", "actions");
@@ -112,7 +115,7 @@
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const data = await response.json();
       const songs = data.songs.map((row) => {
-        const [title, artistIndex, releaseIndexes, year, primaryKeyIndex, appearingKeyIndexes, bpm, piascoreScoreId, videos, sync, effectIndexes] = row;
+        const [title, artistIndex, releaseIndexes, year, primaryKeyIndex, appearingKeyIndexes, bpm, piascoreScoreId, videos, sync, effectIndexes, tabPart] = row;
         const song = {
           title,
           artist: data.artists[artistIndex],
@@ -131,6 +134,7 @@
         }
         if (videos) song.videos = videos.map(([videoTitle, url]) => ({ title: videoTitle, url }));
         if (effectIndexes) song.effects = effectIndexes.map((index) => data.effects[index]);
+        if (tabPart) song.tabPart = tabPart;
         return song;
       });
       const baseSongs = fixedArtist
