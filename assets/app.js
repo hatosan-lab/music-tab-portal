@@ -4,6 +4,7 @@
   const body = document.body;
   const dataUrl = body.dataset.dataUrl;
   const capoUrl = body.dataset.capoUrl || "";
+  const aoooCapoUrl = body.dataset.aoooCapoUrl || "";
   const fixedArtist = body.dataset.artist || "";
   const grid = document.getElementById("songGrid");
   const countNode = document.getElementById("resultCount");
@@ -87,6 +88,14 @@
     if (song.artist === "UNISON SQUARE GARDEN" && song.capo !== undefined) {
       addDetail(details, "カポ: ", song.capo === 0 ? "なし" : `${song.capo}カポ`);
     }
+    if (song.artist === "Aooo") {
+      if (song.leadCapo !== undefined) {
+        addDetail(details, "Lead Gtカポ: ", song.leadCapo === 0 ? "なし" : `${song.leadCapo}カポ`);
+      }
+      if (song.rhythmCapo !== undefined) {
+        addDetail(details, "Rhythm Gtカポ: ", song.rhythmCapo === 0 ? "なし" : `${song.rhythmCapo}カポ`);
+      }
+    }
     if (song.bpm !== undefined) addDetail(details, "基準BPM: ", `${song.bpm}`);
     if (song.tabPart && song.artist !== "UNISON SQUARE GARDEN" && song.artist !== "Aooo") {
       addDetail(details, "TABパート: ", song.tabPart);
@@ -127,6 +136,13 @@
         capoData = await capoResponse.json();
       }
 
+      let aoooCapoData = null;
+      if (aoooCapoUrl) {
+        const aoooCapoResponse = await fetch(aoooCapoUrl, { cache: "no-cache" });
+        if (!aoooCapoResponse.ok) throw new Error(`Aooo capo HTTP ${aoooCapoResponse.status}`);
+        aoooCapoData = await aoooCapoResponse.json();
+      }
+
       const songs = data.songs.map((row) => {
         const [title, artistIndex, releaseIndexes, year, primaryKeyIndex, appearingKeyIndexes, bpm, piascoreScoreId, videos, sync, effectIndexes, tabPart] = row;
         const song = {
@@ -150,6 +166,11 @@
         if (tabPart) song.tabPart = tabPart;
         if (capoData && song.artist === capoData.artist) {
           song.capo = capoData.exceptions?.[title] ?? capoData.default;
+        }
+        if (aoooCapoData && song.artist === aoooCapoData.artist) {
+          const aoooCapo = aoooCapoData.songs?.[title];
+          if (Number.isInteger(aoooCapo?.lead)) song.leadCapo = aoooCapo.lead;
+          if (Number.isInteger(aoooCapo?.rhythm)) song.rhythmCapo = aoooCapo.rhythm;
         }
         return song;
       });
