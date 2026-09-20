@@ -328,9 +328,9 @@ a:focus-visible {
 
 
 .portal-story {
-  margin: 0 0 30px;
-  padding-top: 24px;
-  border-top: 1px solid var(--line);
+  margin: 0 0 28px;
+  padding: 0 0 28px;
+  border-bottom: 1px solid var(--line);
 }
 
 .portal-story h2 {
