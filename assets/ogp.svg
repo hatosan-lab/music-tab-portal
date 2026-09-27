@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#f7f7f5"/>
+  <rect x="60" y="60" width="1080" height="510" rx="28" fill="#ffffff" stroke="#e6e6e2" stroke-width="2"/>
+
+  <text x="112" y="136"
+        font-family="Noto Sans CJK JP, Yu Gothic, sans-serif"
+        font-size="24" font-weight="700" letter-spacing="2.6"
+        fill="#666666">HATOSAN MUSIC LAB</text>
+
+  <text x="108" y="258"
+        font-family="Noto Sans CJK JP, Yu Gothic, sans-serif"
+        font-size="68" font-weight="800" letter-spacing="-1.2"
+        fill="#171717">ギターTAB・BPM・キー検索</text>
+
+  <text x="112" y="337"
+        font-family="Noto Sans CJK JP, Yu Gothic, sans-serif"
+        font-size="38" font-weight="700"
+        fill="#171717">UNISON / Aooo 楽曲ポータル</text>
+
+  <text x="112" y="399"
+        font-family="Noto Sans CJK JP, Yu Gothic, sans-serif"
+        font-size="24" font-weight="400"
+        fill="#666666">コピー前の楽曲情報と、販売中ギターTABへの入口。</text>
+
+  <g font-family="Noto Sans CJK JP, Yu Gothic, sans-serif" font-size="20" font-weight="700" fill="#171717">
+    <rect x="112" y="454" width="86" height="48" rx="24" fill="#f0f0ed"/>
+    <text x="155" y="486" text-anchor="middle">TAB</text>
+    <rect x="210" y="454" width="92" height="48" rx="24" fill="#f0f0ed"/>
+    <text x="256" y="486" text-anchor="middle">BPM</text>
+    <rect x="314" y="454" width="88" height="48" rx="24" fill="#f0f0ed"/>
+    <text x="358" y="486" text-anchor="middle">KEY</text>
+    <rect x="414" y="454" width="104" height="48" rx="24" fill="#f0f0ed"/>
+    <text x="466" y="486" text-anchor="middle">CAPO</text>
+    <rect x="530" y="454" width="132" height="48" rx="24" fill="#f0f0ed"/>
+    <text x="596" y="486" text-anchor="middle">EFFECT</text>
+  </g>
+
+  <line x1="940" y1="454" x2="1088" y2="454" stroke="#171717" stroke-width="3"/>
+  <text x="1088" y="492" text-anchor="end"
+        font-family="Noto Sans CJK JP, Yu Gothic, sans-serif"
+        font-size="21" font-weight="700" fill="#171717">Hatosan Music Lab</text>
+</svg>
