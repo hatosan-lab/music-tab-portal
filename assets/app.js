@@ -117,6 +117,14 @@
       videoLink.title = video.title || video.label || "演奏動画";
       actions.append(videoLink);
     });
+    (song.articles || []).forEach((articleLinkData) => {
+      const articleLink = make("a", "button secondary", articleLinkData.label || "解説note");
+      articleLink.href = articleLinkData.url;
+      articleLink.target = "_blank";
+      articleLink.rel = "noopener noreferrer";
+      articleLink.title = articleLinkData.title || articleLinkData.label || "解説note";
+      actions.append(articleLink);
+    });
     if (actions.childElementCount) article.append(actions);
 
     return article;
@@ -143,7 +151,7 @@
       }
 
       const songs = data.songs.map((row) => {
-        const [title, artistIndex, releaseIndexes, year, primaryKeyIndex, appearingKeyIndexes, bpm, piascoreScoreId, videos, sync, effectIndexes, tabPart] = row;
+        const [title, artistIndex, releaseIndexes, year, primaryKeyIndex, appearingKeyIndexes, bpm, piascoreScoreId, videos, sync, effectIndexes, tabPart, articles] = row;
         const song = {
           title,
           artist: data.artists[artistIndex],
@@ -161,6 +169,7 @@
           };
         }
         if (videos) song.videos = videos.map(([videoTitle, url, label]) => ({ title: videoTitle, url, label }));
+        if (articles) song.articles = articles.map(([articleTitle, url, label]) => ({ title: articleTitle, url, label }));
         if (effectIndexes) song.effects = effectIndexes.map((index) => data.effects[index]);
         if (tabPart) song.tabPart = tabPart;
         if (capoData && song.artist === capoData.artist) {
