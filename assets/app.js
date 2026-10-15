@@ -19,6 +19,26 @@
   const sortSelect = document.getElementById("sortSelect");
 
   if (!dataUrl || !grid) return;
+  const VIDEO_HOSTS = new Set(["youtube.com", "www.youtube.com", "m.youtube.com", "youtu.be", "x.com", "twitter.com", "www.twitter.com"]);
+  const ARTICLE_HOSTS = new Set(["note.com", "www.note.com"]);
+  const PIA_HOSTS = new Set(["store.piascore.com"]);
+
+  const safeExternalUrl = (raw, hosts) => {
+    if (typeof raw !== "string" || !/^https:\/\//i.test(raw)) return null;
+    try {
+      const url = new URL(raw);
+      if (url.protocol !== "https:" || url.username || url.password || url.port || !hosts.has(url.hostname.toLowerCase())) return null;
+      return url.href;
+    } catch {
+      return null;
+    }
+  };
+
+  const validScoreId = (value) => {
+    if (typeof value !== "string" && typeof value !== "number") return null;
+    const id = String(value);
+    return /^[1-9]\d{0,11}$/.test(id) ? id : null;
+  };
 
   const make = (tag, className, text) => {
     const el = document.createElement(tag);
@@ -102,24 +122,28 @@
     if (details.childElementCount) article.append(details);
 
     const actions = make("div", "actions");
-    if (song.tab) {
+    if (song.tab && safeExternalUrl(song.tab.url, PIA_HOSTS)) {
       const tabLink = make("a", "button", "PiascoreでギターTABを見る");
-      tabLink.href = song.tab.url;
+      tabLink.href = safeExternalUrl(song.tab.url, PIA_HOSTS);
       tabLink.target = "_blank";
       tabLink.rel = "noopener noreferrer";
       actions.append(tabLink);
     }
     (song.videos || []).forEach((video) => {
+      const videoUrl = safeExternalUrl(video.url, VIDEO_HOSTS);
+      if (!videoUrl) return;
       const videoLink = make("a", "button secondary", video.label || "演奏動画");
-      videoLink.href = video.url;
+      videoLink.href = videoUrl;
       videoLink.target = "_blank";
       videoLink.rel = "noopener noreferrer";
       videoLink.title = video.title || video.label || "演奏動画";
       actions.append(videoLink);
     });
     (song.articles || []).forEach((articleLinkData) => {
+      const articleUrl = safeExternalUrl(articleLinkData.url, ARTICLE_HOSTS);
+      if (!articleUrl) return;
       const articleLink = make("a", "button secondary", articleLinkData.label || "解説note");
-      articleLink.href = articleLinkData.url;
+      articleLink.href = articleUrl;
       articleLink.target = "_blank";
       articleLink.rel = "noopener noreferrer";
       articleLink.title = articleLinkData.title || articleLinkData.label || "解説note";
@@ -162,10 +186,11 @@
         if (primaryKeyIndex !== null && primaryKeyIndex !== undefined) song.primaryKey = data.keys[primaryKeyIndex];
         if (appearingKeyIndexes) song.appearingKeys = appearingKeyIndexes.map((index) => data.keys[index]);
         if (bpm !== null && bpm !== undefined) song.bpm = bpm;
-        if (piascoreScoreId) {
+        const scoreId = validScoreId(piascoreScoreId);
+        if (scoreId) {
           song.tab = {
-            scoreId: piascoreScoreId,
-            url: data.piascoreUrlTemplate.replace("{scoreId}", piascoreScoreId),
+            scoreId,
+            url: `https://store.piascore.com/scores/${scoreId}`,
           };
         }
         if (videos) song.videos = videos.map(([videoTitle, url, label]) => ({ title: videoTitle, url, label }));
